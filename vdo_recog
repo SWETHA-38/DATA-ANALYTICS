@@ -1,0 +1,79 @@
+import cv2
+import face_recognition 
+import os
+
+input_movie = cv2.VideoCapture("video_recog/neymar.mp4")
+height, width = (284 *2, 514*2)
+# output_movie = cv2.VideoWriter('video_recog/sample_video_out.mp4', fourcc, 20, (height, width), True)
+# output_movie = result = cv2.VideoWriter('output_vid.flv',  cv2.VideoWriter_fourcc(*'AVC1'), 
+# 10, (height, width)) 
+length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+image_path = ["video_recog/image/neymar1.jpeg"]
+# image_path = ["video_recog/image/sk.jpeg","video_recog/image/iman.jpeg","video_recog/image/iman1.jpeg","video_recog/image/iman2.jpeg"]
+
+known_face_encodings = []
+known_face_labels = []
+for path in image_path:
+    image = face_recognition.load_image_file(path)
+    face_encoding = face_recognition.face_encodings(image)[0]
+    known_face_encodings.append(face_encoding)
+    known_face_labels.append(os.path.basename(path).split('.')[0])
+
+
+
+face_locations = []
+face_encodings = []
+face_names = []
+frame_number = 0
+
+
+from shutil import rmtree
+folder_path = 'Image Frames'
+if os.path.exists(folder_path):
+    rmtree(folder_path)
+os.makedirs(folder_path)
+
+
+while True:
+    ret, frame = input_movie.read()
+    frame_number += 1
+    
+    # if frame_number==15:
+    #     break
+    
+    print("Writing frame {} / {}".format(frame_number, length))
+    
+
+    if not ret:
+        break
+
+
+    face_locations = face_recognition.face_locations(frame, model="cnn")
+    print(f"face locations in frame {frame_number}", len(face_locations))
+    face_encodings = face_recognition.face_encodings(frame, face_locations)
+    
+    
+    face_labels = []
+    for face_encoding in face_encodings:
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.55)
+        
+        name = "Unknown"
+        if True in matches:
+            match_index = matches.index(True)
+            name = known_face_labels[match_index]
+        
+        if name.startswith('iman'):
+            name='iman'
+        # print(name)    
+        face_labels.append(name)
+    
+    for (top, right, bottom, left), name in zip(face_locations, face_labels):
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+    
+    cv2.imwrite(os.path.join(folder_path, f'my_video_frame{frame_number}.png'), frame)
+'''input_movie.release()
+cv2.destroyAllWindows()
+'''
