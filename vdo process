@@ -1,0 +1,101 @@
+import cv2
+import face_recognition 
+import os
+import tempfile
+
+input_movie = cv2.VideoCapture("video_recog/football_players.mp4")
+# video_path = os.path.abspath(video_file)
+
+# if not os.path.exists(video_path):
+#     print("Error: Video file not found.")
+#     exit()
+
+def load_images_from_folder(folder):
+    print("ffgggg")
+    images = []
+    for person_folder in os.listdir(folder):
+        person_path = os.path.join(folder, person_folder)        
+        if os.path.isdir(person_path):
+            for filename in os.listdir(person_path):
+                if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
+                    img_path = os.path.join(person_path, filename)
+                    images.append(img_path)  
+    return images
+
+dataset_folder = "video_recog/dataset"
+
+dataset_image_paths = load_images_from_folder(dataset_folder)
+
+
+known_face_encodings = []
+known_face_labels = []
+
+for image_path in dataset_image_paths:
+    image = face_recognition.load_image_file(image_path)
+    face_encoding = face_recognition.face_encodings(image)[0]
+    known_face_encodings.append(face_encoding)
+    known_face_labels.append(os.path.basename(os.path.dirname(image_path)))
+    
+
+
+face_locations = []
+face_encodings = []
+face_names = []
+frame_number = 0
+
+
+from shutil import rmtree
+folder_path = 'Image Frames'
+if os.path.exists(folder_path):
+    rmtree(folder_path)
+os.makedirs(folder_path)
+print(input_movie.isOpened(),"jj")
+# if not input_movie.isOpened():
+#     print("Error: Unable to open video file.")
+#     exit()
+    
+length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+
+print("Length of the video:", length)
+
+while True:
+    ret, frame = input_movie.read()
+    frame_number += 1
+    
+    # if frame_number==15:
+    #     break
+    
+    print("Writing frame {} / {}".format(frame_number, length))
+    
+
+    if not ret:
+        break
+
+
+    face_locations = face_recognition.face_locations(frame, model="cnn")
+    print(f"face locations in frame {frame_number}", len(face_locations))
+    face_encodings = face_recognition.face_encodings(frame, face_locations)
+    
+    
+    face_labels = []
+    for face_encoding in face_encodings:
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.55)
+        
+        name = "Unknown"
+        if True in matches:
+            match_index = matches.index(True)
+            name = known_face_labels[match_index]
+        
+ 
+        face_labels.append(name)
+    
+    for (top, right, bottom, left), name in zip(face_locations, face_labels):
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+    
+    cv2.imwrite(os.path.join(folder_path, f'my_video_frame{frame_number}.png'), frame)
+'''input_movie.release()
+cv2.destroyAllWindows()
+'''
