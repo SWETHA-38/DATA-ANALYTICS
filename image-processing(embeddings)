@@ -105,3 +105,12 @@ run :
 	--embeddings output/embeddings.pickle \
 	--detector face_detection_model \
 	--embedding-model openface_nn4.small2.v1.t7
+
+test:
+
+import pickle
+
+with open('/home/rduser/project/WebCam_Image_Recognition/face-recog/output/embeddings.pickle', 'rb') as pkl_file:
+
+    embeddings = pickle.load(pkl_file)
+    print(embeddings)
