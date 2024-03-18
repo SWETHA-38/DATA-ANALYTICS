@@ -25,3 +25,21 @@ https://www.analyticsvidhya.com/blog/2021/01/image-classification-using-convolut
 
 DL DeepFace :
 https://www.turing.com/kb/using-deep-learning-to-design-face-detection-and-recognition-systems
+https://towardsdatascience.com/facial-recognition-using-deep-learning-a74e9059a150
+
+https://www.codemag.com/Article/2205081/Implementing-Face-Recognition-Using-Deep-Learning-and-Support-Vector-Machines
+
+https://www.turing.com/kb/using-deep-learning-to-design-face-detection-and-recognition-systems
+
+https://pypi.org/project/deepface/
+
+
+
+https://github.com/maciejkula/triplet_recommendations_keras/blob/master/readme.md
+https://github.com/AtulJoshi1/Face-Recognition-using-Transfer-Learning/blob/master/Face_reco.ipynb
+https://arxiv.org/pdf/1503.03832.pdf
+https://www.kaggle.com/code/mishki/face-recognition-keras-facenet-inception-model
+https://repository.stcloudstate.edu/cgi/viewcontent.cgi?article=1010&context=ece_etds	
+https://machinelearningmastery.com/how-to-develop-a-face-recognition-system-using-facenet-in-keras-and-an-svm-classifier/ --currently working --you will find some other models in the bottom of this blog
+https://www.analyticsvidhya.com/blog/2020/08/top-4-pre-trained-models-for-image-classification-with-python-code/
+https://github.com/nyoki-mtl/keras-facenet/blob/master/code/inception_resnet_v1.py
