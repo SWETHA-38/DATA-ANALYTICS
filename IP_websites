@@ -43,3 +43,6 @@ https://repository.stcloudstate.edu/cgi/viewcontent.cgi?article=1010&context=ece
 https://machinelearningmastery.com/how-to-develop-a-face-recognition-system-using-facenet-in-keras-and-an-svm-classifier/ --currently working --you will find some other models in the bottom of this blog
 https://www.analyticsvidhya.com/blog/2020/08/top-4-pre-trained-models-for-image-classification-with-python-code/
 https://github.com/nyoki-mtl/keras-facenet/blob/master/code/inception_resnet_v1.py
+
+
+https://github.com/AISangam/Facenet-Real-time-face-recognition-using-deep-learning-Tensorflow
