@@ -1,0 +1,31 @@
+import face_recognition
+import cv2
+
+import pickle
+import os
+
+def extract_embeddings(dataset_path):
+    labels, embeddings = [], []
+    for subdir in os.listdir(dataset_path):
+        subdir_path = os.path.join(dataset_path, subdir)
+        subdir_image_embeddings = []
+        print(subdir)
+        for file in os.listdir(subdir_path):
+            filepath = os.path.join(subdir_path, file)
+            print(file)
+            image = cv2.imread(filepath)
+            rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            boxes = face_recognition.face_locations(rgb_image)
+            face_embedding = face_recognition.face_encodings(rgb_image, boxes, model='large')
+            print(len(face_embedding))
+            if len(face_embedding) == 1:
+                subdir_image_embeddings.append(face_embedding[0])
+        labels.append(subdir)
+        embeddings.append(subdir_image_embeddings)
+        
+    return labels, embeddings
+
+labels, embeddings = extract_embeddings('/home/rduser/project/WebCam_Image_Recognition/Face_Recognition/dataset')
+
+data = {'labels' : labels, 'encodings' : embeddings}
+pickle.dump(data, open('/home/rduser/project/WebCam_Image_Recognition/Face_Recognition/pickles/l5.pickle', 'wb'))
