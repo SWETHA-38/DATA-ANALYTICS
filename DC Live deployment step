@@ -1,0 +1,71 @@
+1)config.read('properties.ini') to config.read('propertiesLive.ini')
+
+2)database is mandatory if server migrations that time we need to change database name,user,password,host and all
+captchaStatus : if user want captcha flag will be True or else False
+
+concurrentsession : if user want to use only one session at a time  will be True or else False
+
+SSOIP : all portal sso url will be here
+[Email]
+KEY: suppose if sso key will be expired we need to changes sso key here
+
+2)DCCP urls.py #    url="https://stgdc.solvedge.com/", to 
+    url="https://dc.solvedge.com/"
+    
+3)index.html
+<meta http-equiv="refresh" content="0; URL='https://stgdc.solvedge.com/dccp-ui/'" />
+to
+<meta http-equiv="refresh" content="0; URL='https://dc.solvedge.com/dccp-ui/'" />
+
+4)repo file will be copy from live and give to sant repo for docker deployment or else windows nssm deployment will be copy repo from live to paste into new project repo
+
+5)Downloadfile
+1)epubdownloadfile ()
+
+i)html=html.replace('<html>','<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">')
+
+changes from https:// to  http://
+
+2)epubdownload_multi()
+i)html=html.replace('<html>','<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">')
+
+changes from https:// to  http://
+
+
+3)video_to_image()
+i)vidimgtag='''<img src="https://'''+httphost+'''/temp/frame'''+str(count)+'''.jpg" width="'''+picture[i][1]+'''" height="'''+picture[i][0]+'''" />'''
+
+changes from http:// to  https://
+
+4)addfontface()
+fontface+='''@font-face{
+                                    font-family:"'''+ft+'''";
+                                    font-weight: normal;
+                                    
+                                    src: url( https://'''+httphost+'''/temp/html'''+str(designproductid)+'''/fonts/'''+fontdict[ft]+''');
+                                    }'''
+changes from http:// to  https://
+
+5)htmlpreview()
+html=html.replace('../repo','https://'+httphost+'/repo')
+changes from http:// to https://
+
+6)unstructuredpdfprint()
+html="""<?xml version="1.0" encoding="UTF-8"?>
+                <html xml:lang="en" xmlns="https://www.w3.org/1999/xhtml">
+                <head>
+                
+            <style>"""+css+"""</style>
+                </head>"""+html+"""</html>""" 
+                
+changes from http:// to https://
+
+
+7)unstructuredpdfprint()
+html=html.replace('<!--?xml version="1.0" encoding="UTF-8"?-->','<?xml version="1.0" encoding="UTF-8"?><html xml:lang="en" xmlns="https://www.w3.org/1999/xhtml">')
+
+changes from http:// to https:// 
+
+8)unstructuredpdfprint()
+html=html.replace('../repo', 'https://'+httphost+'/repo')
+changes from http:// to https://                            

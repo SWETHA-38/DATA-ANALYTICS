@@ -1,0 +1,36 @@
+
+--load the source and destination db
+LOAD DATABASE
+     FROM mssql://RndDev:password@@123@192.168.7.53/dccpinsnxg06032020 --source db
+     INTO postgresql://Nagarajan:N@@gar@@j@@2025@192.168.7.53/test  --destination db
+
+WITH 
+     include drop,          -- Drops existing tables in PostgreSQL database before migration
+     create tables,         -- Automatically create tables in PostgreSQL if they don’t exist
+     create indexes,        -- Transfer indexes from MSSQL to PostgreSQL
+     reset sequences,       -- Reset sequences in PostgreSQL to avoid conflicts
+     prefetch rows = 10000,
+     batch rows = 1000,     -- Rows to process per batch
+     workers = 8           -- Number of concurrent processes for performance
+
+        
+SET 
+     maintenance_work_mem to '64MB',
+     work_mem to '12MB',
+     search_path to 'public'
+     
+CAST
+    type varchar to text drop typemod,
+    type nvarchar to text drop typemod,
+    type text to text drop typemod
+     
+--including only table names like 'loginhistory' in schema 'dbo'
+              
+ALTER 
+     schema 'dbo' rename to 'public';  -- Maps SQL Server's 'dbo' schema to PostgreSQL's 'public'
+
+
+--run cmd
+--docker run --rm -it -v /home/swetha/Desktop/mssql_postgres.load:/migration.load ghcr.io/dimitri/pgloader:latest pgloader /migration.load
+     
+--/home/kiriprabu/mssql_postgres.load is path of this file.
